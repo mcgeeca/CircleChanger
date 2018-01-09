@@ -4,8 +4,8 @@ A problem in which to practice:
   -- using SEQUENCES
 
 Authors: Valerie Galluzzi, David Mutchler, Dave Fisher, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Craig McGee Jr.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 import random
@@ -101,6 +101,8 @@ class CircleChanger(object):
         # the SPECIFICATION of the method.  That is why you read the
         # TEST function before implementing the method that it tests.
         ################################################################
+        circle = rg.Circle(rg.Point(x, y), radius)
+        circle.fill_color = fill_color
 
     def __repr__(self):
         """
