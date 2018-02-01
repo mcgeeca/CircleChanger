@@ -14,6 +14,7 @@ import time
 import math
 import m1t_test_CircleChanger as m1_tests
 
+
 ########################################################################
 # IMPORTANT:
 #   Your instructor will help you get started on this exercise.
@@ -209,7 +210,7 @@ class CircleChanger(object):
         x1 = self.circle.center.x
         y2 = point.y
         y1 = self.circle.center.y
-        distance = math.sqrt((x2-x1)**2 + (y2-y1)**2)
+        distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
         return distance
 
     def swell_or_shrink_once(self, amount_to_swell_or_shrink):
@@ -278,13 +279,13 @@ class CircleChanger(object):
         self.circle.radius = self.circle.radius + amount_to_swell_or_shrink
         if self.circle.radius < 1:
             self.circle.radius = 1
-        self.circle.outline_thickness = random.randint(3,15)
+        self.circle.outline_thickness = random.randint(3, 15)
         find_range = (len(self.colors))
         randomized = random.randint(0, find_range - 1)
         self.circle.fill_color = self.colors[randomized]
 
-
-    def swell_or_shrink_repeatedly(self, amount_to_swell_or_shrink, times_to_swell_or_shrink):
+    def swell_or_shrink_repeatedly(self, amount_to_swell_or_shrink,
+                                   times_to_swell_or_shrink):
         """
         What comes in:
           -- self
@@ -341,9 +342,11 @@ class CircleChanger(object):
         #   (below).  Third, implement and test this method.
         ################################################################
         for k in range(times_to_swell_or_shrink):
-            first_swell_or_shrink = self.swell_or_shrink_once(amount_to_swell_or_shrink)
+            first_swell_or_shrink = self.swell_or_shrink_once(
+                amount_to_swell_or_shrink)
             self.draw()
-            undone_first_swell_or_shrink = self.swell_or_shrink_once(-amount_to_swell_or_shrink)
+            undone_first_swell_or_shrink = self.swell_or_shrink_once(
+                -amount_to_swell_or_shrink)
             self.draw
 
     def swallow(self, other_circle_changer):
@@ -372,7 +375,7 @@ class CircleChanger(object):
             :rtype CircleChanger
         """
         ################################################################
-        # TODO: 6.
+        # DONE: 6.
         #   First, READ the doc-string (specification) above.
         #   Second, READ the   run_test_swallow   function (below).
         #   Third, implement and test this method.
@@ -382,9 +385,14 @@ class CircleChanger(object):
         #   the center and radius of the new CircleChanger.
         #   NO CREDIT if you use the distance formula here.
         # ################################################################
-        center = (self.get_distance_from(other_circle_changer)) / 2
-        radius = ()
-        new_Circle_Changer = rg.Circle(center, )
+        center = self.circle.center.halfway_to(
+            other_circle_changer.circle.center)
+
+        radius = self.get_distance_from(other_circle_changer.circle.center) / 2
+
+        new_circle_changer = CircleChanger(center.x, center.y, radius,
+                                           'red', self.colors + other_circle_changer.colors)
+        return new_circle_changer
 
     def change_color(self, index_of_color):
         """
@@ -406,13 +414,12 @@ class CircleChanger(object):
             :type index_of_color: int
         """
         ################################################################
-        # TODO: 7.
+        # DONE: 7.
         #   First, READ the doc-string (specification) above.
         #   Second, READ the   run_test_change_color   function (below).
         #   Third, implement and test this method.
         ################################################################
-        color_based_on_index= self.circle[index_of_color]
-        self.circle.fill_color = color_based_on_index
+        self.circle.fill_color = self.colors[index_of_color]
 
     def change_to_original_color(self):
         """
@@ -425,11 +432,12 @@ class CircleChanger(object):
                was constructed.
         """
         ################################################################
-        # TODO: 8.
+        # DONE: 8.
         #   First, READ the doc-string (specification) above.
         #   Second, READ the   run_test_change_to_original_color   function
         #   (below).  Third, implement and test this method.
         ################################################################
+        self.circle.fill_color = self.original_fill_color
 
     def change_to_next_color_in_tuple(self):
         """
@@ -464,11 +472,16 @@ class CircleChanger(object):
         fill color have no effect on or interaction with this method.
         """
         ################################################################
-        # TODO: 9.
+        # DONE: 9.
         #   First, READ the doc-string (specification) above.
         #   Second, READ the   run_test_change_to_next_color_in_tuple
         #   function (below).  Third, implement and test this method.
         ################################################################
+        self.change_color(self.index_in_colors_tuple)
+
+        self.index_in_colors_tuple = ((self.index_in_colors_tuple + 1) %
+
+                                      len(self.colors))
 
 
 ########################################################################
@@ -483,7 +496,8 @@ def run_test_init():
     m1_tests.start_drawing('Testing: the   __init__   method')
 
     # Construct two CircleChanger objects:
-    circle_changer1 = CircleChanger(100, 150, 100, 'blue', ('red', 'blue', 'green'))
+    circle_changer1 = CircleChanger(100, 150, 100, 'blue',
+                                    ('red', 'blue', 'green'))
     circle_changer2 = CircleChanger(300, 50, 30, 'yellow', ('green', 'gold'))
 
     # Print and draw them:
@@ -548,7 +562,7 @@ def run_test_swell_or_shrink_once():
     print('After construction:')
     circle_changer1 = CircleChanger(200, 150, 30, 'blue',
                                     ('blue', 'yellow', 'green',
-                                        'aquamarine', 'brown'))
+                                     'aquamarine', 'brown'))
     print(circle_changer1)
     circle_changer1.draw()
 
@@ -582,6 +596,7 @@ def run_test_swell_or_shrink_once():
     Left circle is bigger (radius 130), still BLUE but thickness 13,
     Right circle is smaller (radius 20), GREEN with thickness 3,
     Middle circle is bigger (radius 50), YELLOW with thickness 6.""")
+
 
 #     # Apply the   swell_or_shrink_once  method to each a second time:
 #     circle_changer1.swell_or_shrink_once(-80)
@@ -621,7 +636,7 @@ def run_test_swell_or_shrink_repeatedly():
     print('After construction:')
     circle_changer1 = CircleChanger(200, 150, 30, 'blue',
                                     ('blue', 'yellow', 'green',
-                                        'aquamarine', 'brown'))
+                                     'aquamarine', 'brown'))
     print(circle_changer1)
     circle_changer1.draw("""
     A BLUE circle at (200, 150) with radius 30 and thickness 1.""")
@@ -685,7 +700,7 @@ def run_test_swallow():
     # has a   colors   attribute that is the CONCATENATION
     # of the  colors   attributes of the swallowed CircleChangers.
     if circle_changer3.colors != (circle_changer4.colors +
-                                  circle_changer5.colors):
+                                      circle_changer5.colors):
         message = """The   colors   instance variable
     of the swallowing CircleChanger (the one RETURNED by
     the   swallow   method) is wrong.
@@ -733,7 +748,7 @@ def run_test_change_color():
     print(circle_changer1)
     circle_changer2 = CircleChanger(350, 130, 50, 'purple',
                                     ('yellow', 'magenta', 'blue',
-                                        'green', 'yellow', 'aquamarine'))
+                                     'green', 'yellow', 'aquamarine'))
     print(circle_changer2)
     circle_changer2.draw("""
     A BLACK circle at (100, 100) with radius 70,
@@ -801,7 +816,7 @@ def run_test_change_to_original_color():
     print(circle_changer1)
     circle_changer2 = CircleChanger(280, 100, 100, 'purple',
                                     ('yellow', 'magenta', 'blue',
-                                        'green', 'yellow', 'aquamarine'))
+                                     'green', 'yellow', 'aquamarine'))
     print(circle_changer2)
     circle_changer2.draw("""
     A BLACK circle at (100, 100) with radius 100,
@@ -831,7 +846,7 @@ def run_test_change_to_original_color():
 
 def run_test_change_to_next_color_in_tuple():
     """ Tests the   change_to_next_color_in_tuple   method. """
-#     m1_tests.change_to_next_color()  # This runs OUR tests.
+    #     m1_tests.change_to_next_color()  # This runs OUR tests.
 
     # This is a VISUAL test.
     # Construct 2 CircleChanger objects, printing and drawing them.
@@ -845,7 +860,7 @@ def run_test_change_to_next_color_in_tuple():
     print(circle_changer1)
     circle_changer2 = CircleChanger(280, 100, 40, 'purple',
                                     ('yellow', 'magenta', 'blue',
-                                        'green', 'yellow', 'aquamarine'))
+                                     'green', 'yellow', 'aquamarine'))
     print(circle_changer2)
     circle_changer2.draw("""
     A BLACK circle at (100, 100) with radius 100,
